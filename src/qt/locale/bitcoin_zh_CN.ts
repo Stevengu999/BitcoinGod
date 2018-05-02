@@ -318,6 +318,18 @@
         <translation>打开 &amp;URI...</translation>
     </message>
     <message>
+        <source>Import</source>
+        <translation>导入</translation>
+    </message>
+    <message>
+        <source>Old BTC user get 1:1 GOD</source>
+        <translation>老BTC用户1:1认领GOD</translation>
+    </message>
+    <message>
+        <source>Choose File</source>
+        <translation>选择文件</translation>
+    </message>
+    <message>
         <source>Click to disable network activity.</source>
         <translation>点击禁用网络活动。</translation>
     </message>
@@ -836,6 +848,53 @@
         <translation>重置图形界面所有的变更设置</translation>
     </message>
 </context>
+<context>
+<name>MnemonicDialog</name>
+    <message>
+        <source>Import mnemonic</source>
+        <translation>导入助记词</translation>
+    </message>
+    <message>
+        <source>Input your mnemonic</source>
+        <translation>输入助记词</translation>
+    </message>
+    <message>
+        <source>Import privatekey</source>
+        <translation>导入私钥</translation>
+    </message>
+    <message>
+        <source>Import privakeyfile</source>
+        <translation>导入私钥文件</translation>
+    </message>
+    <message>
+        <source>Input single privatekey</source>
+        <translation>输入单个私钥</translation>
+    </message>
+    <message>
+        <source>Input privatekey file</source>
+        <translation>输入私钥文件</translation>
+    </message>
+    <message>
+        <source>Separating by space</source>
+        <translation>以空格分开</translation>
+    </message>
+    <message>
+        <source>example: L2pVnppu4S12FDFTn6sCoyvfCU4QiedHVxNyqJQ63Kty6gGRm1Mz</source>
+        <translation>例如: L2pVnppu4S12FDFTn6sCoyvfCU4QiedHVxNyqJQ63Kty6gGRm1Mz</translation>
+    </message>
+    <message>
+        <source>Please choose your backupwallet file in your folder. The wallet file is not *.dat but is a file returned by command "dumpwallet filename".</source>
+        <translation>请在你的文件系统中选择你的私钥文件.\n这个私钥不是以dat为后缀的文件,而是由命令"dumpwallet file"得到的</translation>
+    </message>
+</context>
+<context>
+    <name>WalletChooseDialog</name>
+    <message>
+        <source>choose wallet</source>
+        <translation>选择钱包</translation>
+    </message>
+</context>
+    
 <context>
     <name>Intro</name>
     <message>

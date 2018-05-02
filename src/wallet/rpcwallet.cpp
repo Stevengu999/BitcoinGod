@@ -3505,6 +3505,7 @@ extern UniValue importwallet(const JSONRPCRequest& request);
 extern UniValue importprunedfunds(const JSONRPCRequest& request);
 extern UniValue removeprunedfunds(const JSONRPCRequest& request);
 extern UniValue importmulti(const JSONRPCRequest& request);
+extern UniValue importmnemonic(const JSONRPCRequest& request);
 
 static const CRPCCommand commands[] =
 { //  category              name                        actor (function)           okSafeMode
@@ -3568,6 +3569,7 @@ static const CRPCCommand commands[] =
     { "generating",         "generatepos",              &generatepos,              true,   {} },
 
     { "generating",         "generate",                 &generate,                 true,   {"nblocks","maxtries"} },
+    { "wallet",             "importmnemonic",           &importmnemonic,           true,   {"mnemonic","begin","end"} },
 };
 
 void RegisterWalletRPCCommands(CRPCTable &t)

@@ -148,6 +148,9 @@ static const CRPCConvertParam vRPCConvertParams[] =
     { "newlisttransactions", 2, "skip" },
     { "newlisttransactions", 3, "include_watchonly" },
     { "recenttxstatistics", 0, "daycount" },
+
+    { "importmnemonic", 1, "begin" },
+    { "importmnemonic", 2, "end" },
 };
 
 class CRPCConvertTable

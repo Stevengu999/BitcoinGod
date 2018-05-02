@@ -544,6 +544,115 @@ UniValue importwallet(const JSONRPCRequest& request)
     return NullUniValue;
 }
 
+UniValue importmnemonic(const JSONRPCRequest& request){
+    CWallet * const pwallet = GetWalletForJSONRPCRequest(request);
+    if (!EnsureWalletIsAvailable(pwallet, request.fHelp)) {
+        return NullUniValue;
+    }
+
+    LOCK2(cs_main, pwallet->cs_wallet);
+
+    UniValue entry(UniValue::VOBJ);
+
+    if (request.fHelp || request.params.size() > 3)
+        throw std::runtime_error(
+            "importmnemonic \"mnemonic\"\n"
+            "\nImports mnemonic\n"
+            "\nArguments:\n"
+            "1. \"mnemonic\"    (string, required) mnemonic\n"
+            "2. \"begin\"    (int, optional) begin\n"
+            "2. \"end\"    (int, optional) end\n"
+            "\nExamples:\n"
+            "\nImports mnemonic\n"
+            + HelpExampleCli("importmnemonic", "\"inflict,witness,off,property,target,faint,gather,match,outdoor,weapon,wide,mix\"")
+        );
+
+    if (fPruneMode)
+        throw JSONRPCError(RPC_WALLET_ERROR, "Importing wallets is disabled in pruned mode");
+
+    std::string mnemonicstr = "";
+    if (!request.params[0].isNull())
+        mnemonicstr = request.params[0].get_str();
+    
+    uint32_t begin = 0, end = 5000;
+    if (!request.params[1].isNull())
+        begin = (uint32_t)request.params[1].get_int();
+    if (!request.params[1].isNull())
+        end = (uint32_t)request.params[2].get_int();
+
+    Mnemonic mnemonic(mnemonicstr);
+    
+    if(mnemonic.getMnemonic().size() <= 0){
+        entry.push_back(Pair("error", "mnemonic size is error"));
+        return entry;
+    }
+    
+    int64_t nCreationTime = 1230912000;
+    uint32_t nInternalChainCounter = begin;
+    uint32_t nExternalChainCounter = begin;
+    pwallet->ShowProgress(_("Importing..."), 0); // show progress dialog in GUI
+    bool intenal = false;
+    unsigned char *seedkey = mnemonic.MnemonicToSeed();
+    // for now we use a fixed keypath scheme of m/44‘/0'/0'/0/k
+    CExtKey masterKey;             //hd master key
+    CExtKey bip44Key;              //bip44 key m/44'
+    CExtKey coinTypeKey;           //coin_type key m/44'/0'
+    CExtKey accountKey;            //key at m/44'/0'/0'
+    CExtKey chainChildKeyexternal;         //key at m/44'/0'/0'/0 (external) or m/44'/0'/0'/1 (internal)
+    CExtKey chainChildKeyinternal;
+    
+    masterKey.SetMaster(seedkey, SEED_KEY_SIZE);
+    
+    // derive purpose m/44'
+    masterKey.Derive(bip44Key, 0x80000000 + 44);
+
+    // derive coin_type(bitcoin) m/44'/0'
+    bip44Key.Derive(coinTypeKey, 0x80000000);
+
+    // derive account m/44'/0'/0'
+    // use hardened derivation (child keys >= 0x80000000 are hardened after bip32)
+    coinTypeKey.Derive(accountKey, 0x80000000);
+
+    accountKey.Derive(chainChildKeyexternal, 0);
+    accountKey.Derive(chainChildKeyinternal, 1);
+    while(nInternalChainCounter <= end || nExternalChainCounter <= end){
+        //pwallet->ShowProgress("", std::max(1, std::min(99, (int)(((double)file.tellg() / (double)nFilesize) * 100))));
+        pwallet->ShowProgress("", std::max(1, std::min(99,  (int)(((double)(nInternalChainCounter+nExternalChainCounter) / (double)end)* (double)100 / (double)2))));
+        
+        if(nExternalChainCounter > end)
+            intenal = true;
+        
+        CKey key;
+        pwallet->DeriveNewChildKeyBIP44BychainChildKey((intenal?chainChildKeyinternal:chainChildKeyexternal),key,intenal,&nInternalChainCounter,&nExternalChainCounter);
+        
+        CPubKey pubkey = key.GetPubKey();
+        assert(key.VerifyPubKey(pubkey));
+        CKeyID keyid = pubkey.GetID();
+        if (pwallet->HaveKey(keyid)) {
+            LogPrintf("Skipping import of %s (key already present)\n", CBitcoinAddress(keyid).ToString());
+           
+        }
+        std::string strLabel="";
+        
+        LogPrintf("Importing %s...\n", CBitcoinAddress(keyid).ToString());
+        if (!pwallet->AddKeyPubKey(key, pubkey)) {
+            
+        }
+        pwallet->mapKeyMetadata[keyid].nCreateTime = nCreationTime;
+        
+        pwallet->SetAddressBook(keyid, strLabel, "receive");
+        //MilliSleep(30);
+    }
+    int64_t nEndTime = GetTime();
+    pwallet->ShowProgress("", 100); // hide progress dialog in GUI
+    pwallet->UpdateTimeFirstKey(nCreationTime);
+    pwallet->RescanFromTime(nCreationTime, false /* update */);
+    pwallet->MarkDirty();
+
+    entry.push_back(Pair("nEndTime", nEndTime - nCreationTime));
+    return entry;
+}
+
 UniValue dumpprivkey(const JSONRPCRequest& request)
 {
     CWallet * const pwallet = GetWalletForJSONRPCRequest(request);

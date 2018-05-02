@@ -404,6 +404,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Import</source>
+        <translation>Import</translation>
+    </message>
+    <message>
+        <source>Old BTC user get 1:1 GOD</source>
+        <translation>Old BTC user get 1:1 GOD</translation>
+    </message>
+    <message>
+        <source>Choose File</source>
+        <translation>Choose File</translation>
+    </message>
+    <message>
         <location line="+359"/>
         <source>Click to disable network activity.</source>
         <translation type="unfinished"></translation>
@@ -1050,6 +1062,54 @@
         <translation type="unfinished"></translation>
     </message>
 </context>
+<context>
+<name>MnemonicDialog</name>
+    <message>
+        <source>Import mnemonic</source>
+        <translation>Import mnemonic</translation>
+    </message>
+    <message>
+        <source>Input your mnemonic</source>
+        <translation>Input your mnemonic</translation>
+    </message>
+    <message>
+        <source>Import privatekey</source>
+        <translation>Import privatekey</translation>
+    </message>
+    <message>
+        <source>Import privakeyfile</source>
+        <translation>Import privakeyfile</translation>
+    </message>
+    <message>
+        <source>Input single privatekey</source>
+        <translation>Input single privatekey</translation>
+    </message>
+    <message>
+        <source>Input privatekey file</source>
+        <translation>Input privatekey file</translation>
+    </message>
+    <message>
+        <source>Separating by space</source>
+        <translation>Separating by space</translation>
+    </message>
+    <message>
+        <source>example: L2pVnppu4S12FDFTn6sCoyvfCU4QiedHVxNyqJQ63Kty6gGRm1Mz</source>
+        <translation>example: L2pVnppu4S12FDFTn6sCoyvfCU4QiedHVxNyqJQ63Kty6gGRm1Mz</translation>
+    </message>
+    <message>
+        <source>Please choose your backupwallet file in your folder.\n The wallet file is not *.dat but is a file returned by command "dumpwallet filename".</source>
+        <translation>Please choose your backupwallet file in your folder.\n The privatekey file is not *.dat but is a file returned by command "dumpwallet filename".</translation>
+    </message>
+</context>
+
+<context>
+    <name>WalletChooseDialog</name>
+    <message>
+        <source>choose wallet</source>
+        <translation>choose wallet</translation>
+    </message>
+</context>
+
 <context>
     <name>Intro</name>
     <message>
